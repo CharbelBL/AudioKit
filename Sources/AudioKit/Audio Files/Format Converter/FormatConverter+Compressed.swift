@@ -41,11 +41,21 @@ extension FormatConverter {
             }
 
             // session.progress could be sent out via a delegate for this session
-            session.outputURL = outputURL
-            session.outputFileType = outputFileType
-            session.exportAsynchronously {
-                completionHandler?(session.error)
-            }
+			Task{
+				
+				if #available(visionOS 2.0, *) {
+					do{
+						try await session.export(to: outputURL, as: outputFileType)
+					}catch {
+						completionHandler?(error)
+					}
+				} else {
+				}
+				
+			}
+			
+   
+           
         }
     }
 
